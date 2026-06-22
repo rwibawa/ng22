@@ -3,6 +3,9 @@ import { HousingLocationInfo } from './housing-location';
 
 @Service()
 export class Housing {
+  submitApplication(firstName: string, lastName: string, email: string) {
+    console.log('submitted application for ' + firstName + ' ' + lastName + ' with email ' + email);
+  }
 
   readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
 
