@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../housing-location';
-import { HousingService } from '../housing.service';
+import { Housing } from '../housing';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +23,7 @@ import { HousingService } from '../housing.service';
 })
 export class Home {
   housingLocationList: HousingLocationInfo[] = [];
-  housingService: HousingService = inject(HousingService);
+  housingService: Housing = inject(Housing);
 
   constructor() {
     this.housingLocationList = this.housingService.getAllHousingLocations();

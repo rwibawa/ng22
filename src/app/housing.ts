@@ -2,7 +2,7 @@ import { Service } from '@angular/core';
 import { HousingLocationInfo } from './housing-location';
 
 @Service()
-export class HousingService {
+export class Housing {
 
   readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
 
