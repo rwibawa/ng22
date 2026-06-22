@@ -1,0 +1,23 @@
+<nav class="navbar">
+  <div class="navbar__brand">
+    <span class="navbar__logo">🏥</span>
+    <a routerLink="/" class="navbar__title">MedClinic</a>
+  </div>
+
+  <button class="navbar__toggle" (click)="toggleMenu()" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="navbar__links" [class.is-open]="menuOpen">
+    <li>
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="menuOpen = false">
+        <span class="icon">📊</span> Dashboard
+      </a>
+    </li>
+    <li>
+      <a routerLink="/patients" routerLinkActive="active" (click)="menuOpen = false">
+        <span class="icon">👥</span> Patients
+      </a>
+    </li>
+  </ul>
+</nav>

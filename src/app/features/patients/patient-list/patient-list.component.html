@@ -1,0 +1,92 @@
+<div class="patient-list">
+  <div class="patient-list__header">
+    <h1>Patients</h1>
+    <p class="subtitle">Search FHIR patient records from Metriport</p>
+  </div>
+
+  <!-- Search Form -->
+  <form class="search-form" (ngSubmit)="onSearch()">
+    <div class="search-form__fields">
+      <div class="form-group">
+        <label for="searchName">Patient Name</label>
+        <input
+          id="searchName"
+          type="text"
+          placeholder="e.g. Smith"
+          [ngModel]="searchName()"
+          (ngModelChange)="searchName.set($event)"
+          name="searchName"
+        />
+      </div>
+      <div class="form-group">
+        <label for="searchBirthdate">Date of Birth</label>
+        <input
+          id="searchBirthdate"
+          type="date"
+          [ngModel]="searchBirthdate()"
+          (ngModelChange)="searchBirthdate.set($event)"
+          name="searchBirthdate"
+        />
+      </div>
+    </div>
+    <div class="search-form__actions">
+      <button type="submit" class="btn btn--primary" [disabled]="loading()">
+        @if (loading()) { Searching… } @else { 🔍 Search }
+      </button>
+      <button type="button" class="btn btn--secondary" (click)="onClear()" [disabled]="loading()">
+        Clear
+      </button>
+    </div>
+  </form>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="state-message">
+      <div class="spinner"></div>
+      <p>Loading patients…</p>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="alert alert--error">
+      <strong>Error:</strong> {{ error() }}
+    </div>
+  }
+
+  <!-- Results -->
+  @if (!loading() && !error()) {
+    @if (patients().length === 0) {
+      <div class="state-message">
+        <p>No patients found. Try a different search or check your API configuration.</p>
+      </div>
+    } @else {
+      <p class="results-count">{{ patients().length }} patient(s) found</p>
+      <div class="patient-cards">
+        @for (patient of patients(); track patient.id) {
+          <a [routerLink]="['/patients', patient.id]" class="patient-card">
+            <div class="patient-card__avatar">
+              {{ patient.fullName.charAt(0).toUpperCase() }}
+            </div>
+            <div class="patient-card__info">
+              <h3>{{ patient.fullName }}</h3>
+              <div class="patient-card__meta">
+                <span class="badge badge--{{ patient.gender }}">{{ patient.gender }}</span>
+                @if (patient.birthDate) {
+                  <span>🎂 {{ formatDate(patient.birthDate) }} ({{ formatAge(patient.birthDate) }})</span>
+                }
+                @if (patient.phone) {
+                  <span>📞 {{ patient.phone }}</span>
+                }
+              </div>
+              @if (patient.address) {
+                <p class="patient-card__address">📍 {{ patient.address }}</p>
+              }
+            </div>
+            <span class="patient-card__chevron">›</span>
+          </a>
+        }
+      </div>
+    }
+  }
+</div>

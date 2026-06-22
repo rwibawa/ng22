@@ -1,0 +1,109 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  background: #1a6b8a;
+  color: #fff;
+  padding: 0 1.5rem;
+  height: 60px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__logo {
+    font-size: 1.5rem;
+  }
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+  }
+
+  &__toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 4px;
+
+    span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+    }
+  }
+
+  &__links {
+    list-style: none;
+    display: flex;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    margin-left: auto;
+
+    li a {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: 6px;
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: background 0.15s, color 0.15s;
+
+      &:hover,
+      &.active {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+      }
+
+      .icon {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0.75rem 1rem;
+
+    &__toggle {
+      display: flex;
+    }
+
+    &__links {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      gap: 0;
+      margin-left: 0;
+      padding: 0.5rem 0;
+
+      &.is-open {
+        display: flex;
+      }
+
+      li a {
+        padding: 0.65rem 0.5rem;
+      }
+    }
+  }
+}
