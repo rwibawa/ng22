@@ -38,6 +38,12 @@ $ npx ng generate interface housingLocation
 $ npx ng generate service housing --skip-tests
 ```
 
+## 3. Angular Router
+
+### 3.1. Create `details` component
+```shell
+$ npx ng generate component details --standalone --inline-template
+```
 
 
 ## Installation
