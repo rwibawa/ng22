@@ -1,0 +1,264 @@
+.patient-detail {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  color: #1a6b8a;
+  text-decoration: none;
+  font-size: 0.9rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Patient Header
+.patient-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  margin-bottom: 1.5rem;
+
+  &__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a6b8a, #2a9d8f);
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__info {
+    flex: 1;
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.5rem;
+      color: #1a2a3a;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+
+  &__id {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #aaa;
+    font-family: monospace;
+  }
+}
+
+// Tabs
+.tabs {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+
+  &__nav {
+    display: flex;
+    border-bottom: 2px solid #f0f4f8;
+    overflow-x: auto;
+  }
+
+  &__tab {
+    padding: 0.85rem 1.25rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.87rem;
+    color: #666;
+    font-weight: 600;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover {
+      color: #1a6b8a;
+    }
+
+    &.active {
+      color: #1a6b8a;
+      border-bottom-color: #1a6b8a;
+    }
+  }
+
+  &__content {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    min-height: 200px;
+  }
+}
+
+// Resource Card
+.resource-card {
+  border: 1px solid #e8edf4;
+  border-radius: 8px;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border-bottom: 1px solid #e8edf4;
+    gap: 1rem;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: #1a2a3a;
+  }
+
+  &__body {
+    padding: 0.85rem 1rem;
+
+    p {
+      margin: 0.25rem 0;
+      font-size: 0.87rem;
+      color: #444;
+    }
+  }
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  background: #f0f4f8;
+  color: #555;
+
+  &.status--active,
+  &.status--finished,
+  &.status--completed {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  &.status--inactive,
+  &.status--cancelled,
+  &.status--stopped {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  &.status--planned,
+  &.status--draft {
+    background: #fef3c7;
+    color: #92400e;
+  }
+}
+
+.obs-value {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #1a6b8a;
+}
+
+.doc-link {
+  display: inline-block;
+  margin-top: 0.35rem;
+  color: #1a6b8a;
+  font-size: 0.87rem;
+}
+
+.empty-msg {
+  color: #aaa;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.state-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1rem;
+  color: #888;
+  gap: 1rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #cdd5e0;
+  border-top-color: #1a6b8a;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.alert {
+  padding: 0.85rem 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+
+  &--error {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #b91c1c;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+
+  &--male {
+    background: #dbeafe;
+    color: #1d4ed8;
+  }
+
+  &--female {
+    background: #fce7f3;
+    color: #be185d;
+  }
+
+  &--other,
+  &--unknown {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+}

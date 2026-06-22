@@ -1,0 +1,248 @@
+<div class="patient-detail">
+  <!-- Back link -->
+  <a routerLink="/patients" class="back-link">← Back to Patients</a>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="state-message">
+      <div class="spinner"></div>
+      <p>Loading patient data…</p>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="alert alert--error">
+      <strong>Error:</strong> {{ error() }}
+    </div>
+  }
+
+  <!-- Patient Header -->
+  @if (!loading() && patient()) {
+    <div class="patient-header">
+      <div class="patient-header__avatar">
+        {{ patient()!.fullName.charAt(0).toUpperCase() }}
+      </div>
+      <div class="patient-header__info">
+        <h1>{{ patient()!.fullName }}</h1>
+        <div class="patient-header__meta">
+          <span class="badge badge--{{ patient()!.gender }}">{{ patient()!.gender }}</span>
+          @if (patient()!.birthDate) {
+            <span>🎂 {{ fhirHelper.formatDate(patient()!.birthDate) }}
+              ({{ fhirHelper.calculateAge(patient()!.birthDate) }})</span>
+          }
+          @if (patient()!.phone) {
+            <span>📞 {{ patient()!.phone }}</span>
+          }
+          @if (patient()!.email) {
+            <span>✉️ {{ patient()!.email }}</span>
+          }
+          @if (patient()!.address) {
+            <span>📍 {{ patient()!.address }}</span>
+          }
+        </div>
+        <p class="patient-header__id">FHIR ID: {{ patient()!.id }}</p>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tabs__nav">
+        @for (tab of tabs; track tab.id) {
+          <button
+            class="tabs__tab"
+            [class.active]="activeTab() === tab.id"
+            (click)="setTab(tab.id)"
+          >
+            {{ tab.icon }} {{ tab.label }}
+          </button>
+        }
+      </div>
+
+      <div class="tabs__content">
+
+        <!-- ENCOUNTERS -->
+        @if (activeTab() === 'encounters') {
+          @if (encounters().length === 0) {
+            <p class="empty-msg">No encounters found.</p>
+          }
+          @for (enc of encounters(); track enc.id) {
+            <div class="resource-card">
+              <div class="resource-card__header">
+                <span class="resource-card__title">
+                  {{ fhirHelper.formatEncounterType(enc) || 'Encounter' }}
+                </span>
+                <span class="status-badge status--{{ enc.status }}">
+                  {{ fhirHelper.formatEncounterStatus(enc) }}
+                </span>
+              </div>
+              <div class="resource-card__body">
+                @if (enc.class) {
+                  <p><strong>Class:</strong> {{ fhirHelper.formatEncounterClass(enc) }}</p>
+                }
+                @if (enc.period?.start) {
+                  <p><strong>Start:</strong> {{ fhirHelper.formatDateTime(enc.period!.start) }}</p>
+                }
+                @if (enc.period?.end) {
+                  <p><strong>End:</strong> {{ fhirHelper.formatDateTime(enc.period!.end) }}</p>
+                }
+                @if (enc.reasonCode && enc.reasonCode.length > 0) {
+                  <p><strong>Reason:</strong> {{ fhirHelper.formatCodeableConcept(enc.reasonCode![0]) }}</p>
+                }
+                @if (enc.serviceProvider) {
+                  <p><strong>Provider:</strong> {{ enc.serviceProvider.display }}</p>
+                }
+              </div>
+            </div>
+          }
+        }
+
+        <!-- CONDITIONS -->
+        @if (activeTab() === 'conditions') {
+          @if (conditions().length === 0) {
+            <p class="empty-msg">No conditions found.</p>
+          }
+          @for (cond of conditions(); track cond.id) {
+            <div class="resource-card">
+              <div class="resource-card__header">
+                <span class="resource-card__title">
+                  {{ fhirHelper.formatCodeableConcept(cond.code) || 'Condition' }}
+                </span>
+                <span class="status-badge">
+                  {{ fhirHelper.formatConditionStatus(cond) }}
+                </span>
+              </div>
+              <div class="resource-card__body">
+                @if (cond.severity) {
+                  <p><strong>Severity:</strong> {{ fhirHelper.formatCodeableConcept(cond.severity) }}</p>
+                }
+                @if (cond.onsetDateTime) {
+                  <p><strong>Onset:</strong> {{ fhirHelper.formatDate(cond.onsetDateTime) }}</p>
+                }
+                @if (cond.recordedDate) {
+                  <p><strong>Recorded:</strong> {{ fhirHelper.formatDate(cond.recordedDate) }}</p>
+                }
+                @if (cond.verificationStatus) {
+                  <p>
+                    <strong>Verification:</strong>
+                    {{ fhirHelper.formatCodeableConcept(cond.verificationStatus) }}
+                  </p>
+                }
+                @if (cond.note && cond.note.length > 0) {
+                  <p><strong>Note:</strong> {{ cond.note[0].text }}</p>
+                }
+              </div>
+            </div>
+          }
+        }
+
+        <!-- MEDICATIONS -->
+        @if (activeTab() === 'medications') {
+          @if (medications().length === 0) {
+            <p class="empty-msg">No medications found.</p>
+          }
+          @for (med of medications(); track med.id) {
+            <div class="resource-card">
+              <div class="resource-card__header">
+                <span class="resource-card__title">
+                  {{ fhirHelper.formatMedicationName(med) }}
+                </span>
+                <span class="status-badge status--{{ med.status }}">{{ med.status }}</span>
+              </div>
+              <div class="resource-card__body">
+                @if (fhirHelper.formatDosage(med)) {
+                  <p><strong>Dosage:</strong> {{ fhirHelper.formatDosage(med) }}</p>
+                }
+                @if (med.authoredOn) {
+                  <p><strong>Authored:</strong> {{ fhirHelper.formatDate(med.authoredOn) }}</p>
+                }
+                @if (med.requester) {
+                  <p><strong>Prescriber:</strong> {{ med.requester.display }}</p>
+                }
+                @if (med.intent) {
+                  <p><strong>Intent:</strong> {{ med.intent }}</p>
+                }
+              </div>
+            </div>
+          }
+        }
+
+        <!-- OBSERVATIONS -->
+        @if (activeTab() === 'observations') {
+          @if (observations().length === 0) {
+            <p class="empty-msg">No observations found.</p>
+          }
+          @for (obs of observations(); track obs.id) {
+            <div class="resource-card">
+              <div class="resource-card__header">
+                <span class="resource-card__title">
+                  {{ fhirHelper.formatCodeableConcept(obs.code) }}
+                </span>
+                <span class="obs-value">{{ fhirHelper.formatObservationValue(obs) }}</span>
+              </div>
+              <div class="resource-card__body">
+                @if (obs.effectiveDateTime) {
+                  <p><strong>Date:</strong> {{ fhirHelper.formatDateTime(obs.effectiveDateTime) }}</p>
+                }
+                @if (obs.status) {
+                  <p><strong>Status:</strong> {{ obs.status }}</p>
+                }
+                @if (obs.category && obs.category.length > 0) {
+                  <p>
+                    <strong>Category:</strong>
+                    {{ fhirHelper.formatCodeableConcept(obs.category![0]) }}
+                  </p>
+                }
+                @if (obs.interpretation && obs.interpretation.length > 0) {
+                  <p>
+                    <strong>Interpretation:</strong>
+                    {{ fhirHelper.formatCodeableConcept(obs.interpretation![0]) }}
+                  </p>
+                }
+              </div>
+            </div>
+          }
+        }
+
+        <!-- DOCUMENTS -->
+        @if (activeTab() === 'documents') {
+          @if (documents().length === 0) {
+            <p class="empty-msg">No documents found.</p>
+          }
+          @for (doc of documents(); track doc.id) {
+            <div class="resource-card">
+              <div class="resource-card__header">
+                <span class="resource-card__title">
+                  {{ fhirHelper.formatDocumentType(doc) || doc.description || 'Document' }}
+                </span>
+                <span class="status-badge status--{{ doc.status }}">{{ doc.status }}</span>
+              </div>
+              <div class="resource-card__body">
+                @if (doc.date) {
+                  <p><strong>Date:</strong> {{ fhirHelper.formatDateTime(doc.date) }}</p>
+                }
+                @if (doc.description) {
+                  <p><strong>Description:</strong> {{ doc.description }}</p>
+                }
+                @if (doc.content?.[0]?.attachment?.contentType) {
+                  <p><strong>Type:</strong> {{ doc.content[0].attachment.contentType }}</p>
+                }
+                @if (fhirHelper.getDocumentUrl(doc)) {
+                  <a
+                    [href]="fhirHelper.getDocumentUrl(doc)"
+                    target="_blank"
+                    rel="noopener"
+                    class="doc-link"
+                  >
+                    📎 View Document
+                  </a>
+                }
+              </div>
+            </div>
+          }
+        }
+
+      </div>
+    </div>
+  }
+</div>
