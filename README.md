@@ -45,6 +45,57 @@ $ npx ng generate service housing --skip-tests
 $ npx ng generate component details --standalone --inline-template
 ```
 
+## 4. Add HTTP communication
+
+### 4.1. Configure _mock-server_
+```shell
+$ npm -D install json-server
+$ touch db.json
+
+$ npm run mock-server 
+> ng22@0.0.0 mock-server
+> json-server --watch db.json --port 3000
+
+--watch/-w can be omitted, JSON Server 1+ watches for file changes by default
+JSON Server started on PORT :3000
+Press CTRL-C to stop
+Watching db.json...
+
+(˶ᵔ ᵕ ᵔ˶)
+
+Index:
+http://localhost:3000/
+
+Static files:
+Serving ./public directory if it exists
+
+Endpoints:
+http://localhost:3000/locations
+
+```
+
+### 4.2. Configure proxy rewrite (important with `/api`)
+`proxy.conf.json`
+```json
+{
+  "/api": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "logLevel": "debug"
+  }
+}
+```
+
+### 4.3. Run Angular with proxy
+```shell
+$ npm run start 
+> ng22@0.0.0 start
+> ng serve --proxy-config proxy.conf.json
+```
 
 ## Installation
 ```shell

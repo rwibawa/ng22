@@ -7,6 +7,21 @@ export class Housing {
     console.log('submitted application for ' + firstName + ' ' + lastName + ' with email ' + email);
   }
 
+  url = 'https://expert-space-chainsaw-j7rgjwrxjh5qjv-4200.app.github.dev/api/locations'; 
+  // 'http://localhost:3000/api/locations';
+
+  async getAllHousingLocations(): Promise<HousingLocationInfo[]> {
+    const data = await fetch(this.url);
+    return (await data.json()) ?? [];
+  }
+
+  async getHousingLocationById(id: number): Promise<HousingLocationInfo | undefined> {
+    const data = await fetch(`${this.url}/${id}`);
+    const locationJson = await data.json();
+    return locationJson ?? {};
+  }
+
+  /*
   readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
 
   housingLocationList: HousingLocationInfo[] = [
@@ -119,4 +134,5 @@ export class Housing {
   getHousingLocationById(id: number): HousingLocationInfo | undefined {
     return this.housingLocationList.find(housingLocation => housingLocation.id === id);
   }
+  */
 }

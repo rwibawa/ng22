@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HousingLocationInfo } from '../housing-location';
 import { Housing } from '../housing';
@@ -48,6 +48,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./details.css'],
 })
 export class Details {
+  private changeDetectorRef = inject(ChangeDetectorRef);
+  
   route: ActivatedRoute = inject(ActivatedRoute);
   housingService = inject(Housing);
   housingLocation: HousingLocationInfo | undefined;
@@ -59,8 +61,16 @@ export class Details {
   });
 
   constructor() {
-    const housingLocationId = Number(this.route.snapshot.paramMap.get('id'));
-    this.housingLocation = this.housingService.getHousingLocationById(housingLocationId);
+    // const housingLocationId = Number(this.route.snapshot.paramMap.get('id'));
+    // this.housingLocation = this.housingService.getHousingLocationById(housingLocationId);
+
+    const housingLocationId = parseInt(this.route.snapshot.paramMap.get('id') ?? '', 10);
+    this.housingService
+      .getHousingLocationById(housingLocationId)
+      .then((housingLocation: HousingLocationInfo | undefined) => {
+        this.housingLocation = housingLocation;
+        this.changeDetectorRef.markForCheck(); // Notify Angular that a change happened that requires a synchronization.
+      });
   }
 
   submitApplication() {
