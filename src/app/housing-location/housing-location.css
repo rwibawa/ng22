@@ -17,7 +17,7 @@
   padding: 10px 20px 20px 20px;
 }
 .listing-location::before {
-  content: url('/public/location-pin.svg') / '';
+  content: url('/location-pin.svg') / '';
 }
 section.listing a {
   padding-left: 20px;

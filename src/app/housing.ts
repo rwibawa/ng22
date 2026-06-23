@@ -7,8 +7,8 @@ export class Housing {
     console.log('submitted application for ' + firstName + ' ' + lastName + ' with email ' + email);
   }
 
-  url = 'https://expert-space-chainsaw-j7rgjwrxjh5qjv-4200.app.github.dev/api/locations'; 
-  // 'http://localhost:3000/api/locations';
+  url = 'http://localhost:4200/api/locations';
+  //   url = 'https://expert-space-chainsaw-j7rgjwrxjh5qjv-4200.app.github.dev/api/locations'; 
 
   async getAllHousingLocations(): Promise<HousingLocationInfo[]> {
     const data = await fetch(this.url);
