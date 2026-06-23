@@ -60,20 +60,20 @@ describe('Home', () => {
 
   it('should load locations from the housing service', () => {
     expect(housingService.getAllHousingLocations).toHaveBeenCalled();
-    expect(component.housingLocationList).toEqual(housingLocations);
-    expect(component.filteredLocationList).toEqual(housingLocations);
+    expect(component.housingLocationList()).toEqual(housingLocations);
+    expect(component.filteredLocationList()).toEqual(housingLocations);
   });
 
   it('should filter locations by city case-insensitively', () => {
     component.filterResults('chicago');
 
-    expect(component.filteredLocationList).toEqual([housingLocations[1]]);
+    expect(component.filteredLocationList()).toEqual([housingLocations[1]]);
   });
 
   it('should reset to the full list when the filter text is empty', () => {
     component.filterResults('chicago');
     component.filterResults('');
 
-    expect(component.filteredLocationList).toEqual(housingLocations);
+    expect(component.filteredLocationList()).toEqual(housingLocations);
   });
 });
