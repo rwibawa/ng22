@@ -56,7 +56,7 @@ describe('Details', () => {
 
   it('should load the housing location from the route id', () => {
     expect(housingService.getHousingLocationById).toHaveBeenCalledWith(1);
-    expect(component.housingLocation).toEqual(housingLocation);
+    expect(component.housingLocation()).toEqual(housingLocation);
   });
 
   it('should submit the application form values', () => {
