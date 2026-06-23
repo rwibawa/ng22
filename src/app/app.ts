@@ -1,10 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import {Home} from './home/home';
 
 @Component({
   selector: 'app-root',
-  imports: [Home, RouterOutlet, RouterLink], // [RouterOutlet],
+  imports: [RouterOutlet, RouterLink], // [RouterOutlet],
   template: `
     <main>
       <a [routerLink]="['/']">
@@ -21,6 +20,5 @@ import {Home} from './home/home';
   styleUrl: './app.css'
 })
 export class App {
-  title = 'default';
-  // protected readonly title = signal('ng22');
+  protected readonly title = signal('Housing for All');
 }

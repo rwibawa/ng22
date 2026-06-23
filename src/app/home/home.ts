@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../housing-location';
 import { Housing } from '../housing';
@@ -14,7 +14,7 @@ import { Housing } from '../housing';
     </form>
   </section>
   <section class="results">
-    @for (housingLocation of filteredLocationList; track $index) {
+    @for (housingLocation of filteredLocationList(); track $index) {
       <app-housing-location [housingLocation]="housingLocation" />
     }
   </section> 
@@ -22,37 +22,32 @@ import { Housing } from '../housing';
   styleUrl: './home.css',
 })
 export class Home {
-  private changeDetectorRef = inject(ChangeDetectorRef);
-
-  housingLocationList: HousingLocationInfo[] = [];
+  housingLocationList = signal<HousingLocationInfo[]>([]);
+  filteredLocationList = signal<HousingLocationInfo[]>([]);
   housingService: Housing = inject(Housing);
-  filteredLocationList: HousingLocationInfo[] = [];
 
   constructor() {
     // this.housingLocationList = this.housingService.getAllHousingLocations();
     // this.filteredLocationList = this.housingLocationList;
 
     this.housingService
-    .getAllHousingLocations()
-    .then((housingLocationList: HousingLocationInfo[]) => {
-      this.housingLocationList = housingLocationList;
-      this.filteredLocationList = housingLocationList;
-
-      // Because we didn't use signals for our state, you have to notify Angular that a change happened that requires a synchronization.
-      this.changeDetectorRef.markForCheck();
-    });
+      .getAllHousingLocations()
+      .then((housingLocationList: HousingLocationInfo[]) => {
+        this.housingLocationList.set(housingLocationList);
+        this.filteredLocationList.set(housingLocationList);
+      });
   }
 
   filterResults(text: string) {
-
     if (!text) {
-      this.filteredLocationList = this.housingLocationList;
+      this.filteredLocationList.set(this.housingLocationList());
       return;
     }
 
-    this.filteredLocationList = this.housingLocationList.filter((housingLocation: HousingLocationInfo) => {
+    const filtered = this.housingLocationList().filter((housingLocation: HousingLocationInfo) => {
       return housingLocation?.city.toLowerCase().includes(text.toLowerCase());
     });
+    this.filteredLocationList.set(filtered);
   }
 
   /*

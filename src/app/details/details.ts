@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HousingLocationInfo } from '../housing-location';
 import { Housing } from '../housing';
@@ -12,20 +12,20 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
    <article>
     <img 
       class="listing-photo" 
-      [src]="housingLocation?.photo" 
-      alt="Exterior photo of {{ housingLocation?.name }}" 
+      [src]="housingLocation()?.photo" 
+      alt="Exterior photo of {{ housingLocation()?.name }}" 
       crossorigin
     />
     <section class="listing-description">
-      <h2 class="listing-heading">{{ housingLocation?.name }}</h2>
-      <p class="listing-location">{{ housingLocation?.city }}, {{ housingLocation?.state }}</p>
+      <h2 class="listing-heading">{{ housingLocation()?.name }}</h2>
+      <p class="listing-location">{{ housingLocation()?.city }}, {{ housingLocation()?.state }}</p>
     </section>
     <section class="listing-features">
       <h2 class="section-heading">About this housing location</h2>
       <ul>
-        <li>Units available: {{ housingLocation?.availableUnits }}</li>
-        <li>Does this location have wifi? {{ housingLocation?.wifi ? 'Yes' : 'No' }}</li>
-        <li>Does this location have laundry? {{ housingLocation?.laundry ? 'Yes' : 'No' }}</li>
+        <li>Units available: {{ housingLocation()?.availableUnits }}</li>
+        <li>Does this location have wifi? {{ housingLocation()?.wifi ? 'Yes' : 'No' }}</li>
+        <li>Does this location have laundry? {{ housingLocation()?.laundry ? 'Yes' : 'No' }}</li>
       </ul>
     </section>
     <section class="listing-apply">
@@ -48,11 +48,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./details.css'],
 })
 export class Details {
-  private changeDetectorRef = inject(ChangeDetectorRef);
-  
   route: ActivatedRoute = inject(ActivatedRoute);
   housingService = inject(Housing);
-  housingLocation: HousingLocationInfo | undefined;
+  housingLocation = signal<HousingLocationInfo | undefined>(undefined);
 
   applyForm = new FormGroup({
     firstName: new FormControl(''),
@@ -68,8 +66,7 @@ export class Details {
     this.housingService
       .getHousingLocationById(housingLocationId)
       .then((housingLocation: HousingLocationInfo | undefined) => {
-        this.housingLocation = housingLocation;
-        this.changeDetectorRef.markForCheck(); // Notify Angular that a change happened that requires a synchronization.
+        this.housingLocation.set(housingLocation);
       });
   }
 
